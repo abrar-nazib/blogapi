@@ -37,10 +37,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     
     # Third Party Apps
     "rest_framework",
     "corsheaders",
+    "rest_framework.authtoken",
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    "dj_rest_auth",
 
     # Local
     'accounts.apps.AccountsConfig',
@@ -71,10 +77,15 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request', # Within Templates, request object can be accessed
             ],
         },
     },
 ]
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" # Put the Email to the console.
+
+SITE_ID = 1
 
 WSGI_APPLICATION = 'django_project.wsgi.application'
 
@@ -137,6 +148,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = { # new
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [ # For setting authentication mechanism
+        "rest_framework.authentication.SessionAuthentication", # Sessions needed for powering browsable API
+        "rest_framework.authentication.BasicAuthentication", # Basicauthentication for passing the session ID in the HTTP header.
     ],
 }
 
